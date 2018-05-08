@@ -1,8 +1,9 @@
 # -*- coding: utf8 -*-
 
-__version__ = '4.3.3'
+__version__ = '4.3.4'
 __all__ = [
     'OTSClient',
+    'AsyncOTSClient',
 
     # Data Types
     'INF_MIN',
@@ -48,6 +49,7 @@ __all__ = [
 
 
 from tablestore.client import OTSClient
+from tablestore.asyncclient import AsyncOTSClient
 
 from tablestore.metadata import *
 from tablestore.error import *

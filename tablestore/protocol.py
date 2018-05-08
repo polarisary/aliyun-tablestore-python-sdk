@@ -76,7 +76,7 @@ class OTSProtocol(object):
         signature = base64.b64encode(hmac.new(
             self.user_key.encode(self.encoding), signature_string.encode(self.encoding), hashlib.sha1
         ).digest())
-        return signature
+        return signature.decode(self.encoding)
 
     def _make_request_signature(self, query, headers):
         uri, param_string, query_string = urlparse(query)[2:5]
@@ -195,7 +195,7 @@ class OTSProtocol(object):
 
         # 3, check signature
         # decode the byte type
-        if signature != self._make_response_signature(query, headers).decode(self.encoding):
+        if signature != self._make_response_signature(query, headers):
             raise OTSClientError('Invalid signature in response.')
 
     def make_request(self, api_name, *args, **kwargs):
