@@ -31,6 +31,7 @@ class Session(object):
             self.host + self.path + url, 
             data=request_body, 
             headers=request_headers,
+            verify_ssl=False,
         )
 
         if _NETWORK_IO_TIME_COUNT_FLAG:

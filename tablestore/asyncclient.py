@@ -12,16 +12,29 @@ from tablestore.connection import ConnectionPool
 from tablestore.metadata import *
 from tablestore.retry import DefaultRetryPolicy
 
+import logging
+try:  # Python 2.7+
+    from logging import NullHandler
+except ImportError:
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
+
+try:
+    import urlparse 
+except ImportError:
+    import urllib.parse as urlparse
+
 
 class AsyncOTSClient(object):
 
     DEFAULT_ENCODING = 'utf8'
     DEFAULT_SOCKET_TIMEOUT = 50
-    DEFAULT_MAX_CONNECTION = 50
+    # DEFAULT_MAX_CONNECTION = 50
     DEFAULT_LOGGER_NAME = 'tablestore-client'
 
     protocol_class = OTSProtocol
-    connection_pool_class = ConnectionPool 
+    # connection_pool_class = ConnectionPool 
 
     def __init__(self, end_point, access_key_id, access_key_secret, instance_name, **kwargs):
         """
@@ -66,9 +79,9 @@ class AsyncOTSClient(object):
         if self.socket_timeout is None:
             self.socket_timeout = AsyncOTSClient.DEFAULT_SOCKET_TIMEOUT
 
-        self.max_connection = kwargs.get('max_connection')
-        if self.max_connection is None:
-            self.max_connection = AsyncOTSClient.DEFAULT_MAX_CONNECTION
+        # self.max_connection = kwargs.get('max_connection')
+        # if self.max_connection is None:
+        #     self.max_connection = AsyncOTSClient.DEFAULT_MAX_CONNECTION
 
         # initialize logger
         logger_name = kwargs.get('logger_name')
