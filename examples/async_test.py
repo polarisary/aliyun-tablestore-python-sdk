@@ -234,9 +234,8 @@ def do_work(client):
     #         w.cancel()
 
 if __name__ == '__main__':
-    client = AsyncOTSClient("https://socialpeta.cn-beijing.ots.aliyuncs.com", "LTAIPbQ31wPvbA1U", "YrLaOZ1eYuaO1Zfc2y5o35Gfj5Wyje", "socialpeta")
-
     loop = asyncio.get_event_loop()
+    client = AsyncOTSClient("https://socialpeta.cn-beijing.ots.aliyuncs.com", "LTAIPbQ31wPvbA1U", "YrLaOZ1eYuaO1Zfc2y5o35Gfj5Wyje", "socialpeta",loop=loop)
     tasks = do_work(client)
     loop.run_until_complete(asyncio.gather(*tasks))
 

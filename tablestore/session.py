@@ -11,11 +11,15 @@ _network_io_time = 0
 
 class Session(object):
 
-    def __init__(self, host, path, timeout=30):
+    def __init__(self, host, path, timeout=30, loop=None):
         self.host = host
         self.path = path
         self.timeout = 30
-        self.session = aiohttp.ClientSession(loop=asyncio.get_event_loop())
+        self.loop = loop
+        if not self.loop:
+            self.loop = asyncio.get_event_loop()
+
+        self.session = aiohttp.ClientSession(loop=self.loop)
 
     async def close(self):
         await self.session.close()

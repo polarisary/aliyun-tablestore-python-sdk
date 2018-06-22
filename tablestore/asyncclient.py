@@ -30,11 +30,9 @@ class AsyncOTSClient(object):
 
     DEFAULT_ENCODING = 'utf8'
     DEFAULT_SOCKET_TIMEOUT = 50
-    # DEFAULT_MAX_CONNECTION = 50
     DEFAULT_LOGGER_NAME = 'tablestore-client'
 
     protocol_class = OTSProtocol
-    # connection_pool_class = ConnectionPool 
 
     def __init__(self, end_point, access_key_id, access_key_secret, instance_name, **kwargs):
         """
@@ -53,8 +51,6 @@ class AsyncOTSClient(object):
         ``encoding``请求参数的字符串编码类型，默认是utf8。
 
         ``socket_timeout``是连接池中每个连接的Socket超时，单位为秒，可以为int或float。默认值为50。
-
-        ``max_connection``是连接池的最大连接数。默认为50，
 
         ``logger_name``用来在请求中打DEBUG日志，或者在出错时打ERROR日志。
 
@@ -78,10 +74,6 @@ class AsyncOTSClient(object):
         self.socket_timeout = kwargs.get('socket_timeout')
         if self.socket_timeout is None:
             self.socket_timeout = AsyncOTSClient.DEFAULT_SOCKET_TIMEOUT
-
-        # self.max_connection = kwargs.get('max_connection')
-        # if self.max_connection is None:
-        #     self.max_connection = AsyncOTSClient.DEFAULT_MAX_CONNECTION
 
         # initialize logger
         logger_name = kwargs.get('logger_name')
@@ -115,12 +107,12 @@ class AsyncOTSClient(object):
             self.logger
         )
         
-        # initialize connection via user configuration
-        # self.connection = self.connection_pool_class(
-        #     host, path, timeout=self.socket_timeout, maxsize=self.max_connection,
-        # )
-        self.loop = asyncio.get_event_loop()
-        self.session = Session(host, path, timeout=self.socket_timeout)
+        loop = kwargs.get('loop')
+        if loop is None:
+            self.loop = asyncio.get_event_loop()
+        else:
+            self.loop = loop
+        self.session = Session(host, path, timeout=self.socket_timeout, loop=self.loop)
 
         # initialize the retry policy
         retry_policy = kwargs.get('retry_policy')
