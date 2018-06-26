@@ -401,7 +401,7 @@ class AsyncOTSClient(object):
 
                 if self.retry_policy.should_retry(retry_times, e, api_name):
                     retry_delay = self.retry_policy.get_retry_delay(retry_times, e, api_name)
-                    time.sleep(retry_delay)
+                    await asyncio.sleep(retry_delay)
                     retry_times += 1
                 else:
                     raise e
